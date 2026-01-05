@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { gsap } from 'gsap';
 import { RouterModule } from '@angular/router';
 import { Draggable } from "gsap/Draggable";
-gsap.registerPlugin(Draggable);
 
 
 @Component({
@@ -16,14 +15,31 @@ gsap.registerPlugin(Draggable);
 export class LandingComponent implements OnInit{
 
   menuIsOpen = false
+  Menutl: any;
+  FolderTl: any;
 
-  Menutl = gsap.timeline({
-    defaults:{
-      duration:0.7,
-      ease:'power4.inOut'
-    }
-  })
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   ngOnInit(): void{
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    gsap.registerPlugin(Draggable);
+
+    this.Menutl = gsap.timeline({
+      defaults:{
+        duration:0.7,
+        ease:'power4.inOut'
+      }
+    })
+
+    this.FolderTl = gsap.timeline({
+      defaults:{
+        duration:0.7,
+        ease:'power4.inOut'
+      }
+    })
     const chargeTl = gsap.timeline({
       defaults:{
         duration:1,
@@ -82,6 +98,9 @@ export class LandingComponent implements OnInit{
     this.Menutl.pause()
   }
   OpenMenu(){
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     this.menuIsOpen = !this.menuIsOpen
     if(this.menuIsOpen){
       this.Menutl.play()
@@ -95,13 +114,10 @@ export class LandingComponent implements OnInit{
     }
   }
 
-  FolderTl = gsap.timeline({
-    defaults:{
-      duration:0.7,
-      ease:'power4.inOut'
-    }
-  })
   openFolder(){
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     this.FolderTl.to('#FolderBox',{
       y:0,
       opacity:1,
@@ -122,6 +138,9 @@ export class LandingComponent implements OnInit{
     })
   }
   openFolderPin(){
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     this.FolderTl.to('#FolderBox',{
       y:0,
       opacity:1,
@@ -143,6 +162,9 @@ export class LandingComponent implements OnInit{
     })
   }
   closeFolder(){
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     const closetl = gsap.timeline({
       defaults:{
         duration:0.7,
@@ -162,6 +184,9 @@ export class LandingComponent implements OnInit{
 
   isFullScreen = false
   toFullScreen(){
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     this.isFullScreen = !this.isFullScreen
     if(this.isFullScreen){
       gsap.to('#FolderBox',{
